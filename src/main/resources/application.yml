@@ -13,15 +13,26 @@ spring:
     name: 'api-gateway'
   cloud:
     gateway:
+      discovery:
+        locator:
+          lower-case-service-id: true
       routes:
+        - id: serverAuth
+          uri: lb://SERVER-AUTH
+          predicates:
+            - Path=/oauth/**,/user/**
         - id: informacoesCadastrais
           uri: lb://INFORMACOES-CADASTRAIS
           predicates:
-            - Path=/teste/**
-        - id: serverauth
-          uri: lb://SERVER-AUTH
+            - Path=/pedido/**,/fornecedor/**
+        - id: servicoCliente
+          uri: lb://SERVICO-CLIENTE
           predicates:
-             - Path=/oauth/**
+            - Path=/**
 
 
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty: DEBUG
 
